@@ -1,0 +1,50 @@
+<!-- Intro to raw React APIs -->
+<!-- http://localhost:3000/isolated/exercise/02.html -->
+
+<body>
+  <div id="root"></div>
+
+  <!-- 🐨 add React and ReactDOM on the page.
+       💰 Here are script tags that'll do the job:
+  <script src="https://unpkg.com/react@18.1.0/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.1.0/umd/react-dom.development.js"></script>
+  -->
+  <script src="https://unpkg.com/react@18.1.0/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.1.0/umd/react-dom.development.js"></script>
+
+  <script type="module">
+    const rootElement = document.getElementById('root')
+
+    const reactElement = React.createElement('h1', {
+      key: 'react-key-1',
+      id: 'first-id',
+      children: 'Hello World',
+      className: 'container',
+    })
+
+    // Create two spans
+    const span1 = React.createElement('span', {
+      key: 'span-1',
+      id: 'span-1',
+      children: 'Hello',
+    })
+    const span2 = React.createElement('span', {
+      key: 'span-2',
+      id: 'span-2',
+      children: 'World',
+    })
+
+    const appElement = React.createElement('div', {
+      key: 'React-App',
+      id: 'react-app',
+      children: [span1, span2],
+    })
+
+    // ReactDOM.createRoot(rootElement).render(reactElement)
+    ReactDOM.createRoot(rootElement).render(appElement)
+
+    // 🐨 Please re-implement the regular document.createElement code above
+    // with these React API calls
+    // 💰 The example in the markdown file should be a good hint for you.
+  </script>
+</body>
