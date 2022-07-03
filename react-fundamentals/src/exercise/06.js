@@ -26,7 +26,7 @@ function UsernameForm({onSubmitUsername}) {
     setControlledValue(value.toLowerCase())
   }
 
-  const inputRef = React.useRef()
+  // const inputRef = React.useRef()
   // 🐨 get the value from the username input (using whichever method
   // you prefer from the options mentioned in the instructions)
   // 💰 For example: event.target.elements[0].value
