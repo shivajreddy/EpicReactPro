@@ -9,7 +9,6 @@ function useSyncLocalStorageWithState(
   {serialize = JSON.stringify, deserialize = JSON.parse} = {},
 ) {
   const [state, setState] = React.useState(() => {
-    console.log('setting the initial state')
     const valueInLocalStorage = localStorage.getItem(key)
     if (valueInLocalStorage) {
       return deserialize(valueInLocalStorage)
@@ -20,7 +19,6 @@ function useSyncLocalStorageWithState(
   const prevKeyRef = React.useRef(key)
 
   React.useEffect(() => {
-    console.log('running use effect')
     const prevKey = prevKeyRef.current
     if (prevKey !== key) {
       localStorage.removeItem(key)
