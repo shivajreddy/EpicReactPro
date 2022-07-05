@@ -13,7 +13,7 @@ function Greeting({initialName = ''}) {
     if (key === 'name') {
       setKey('firstName')
     } else if (key === 'firstName') {
-      setKey('lastName')
+      setKey('Name')
     } else {
       setKey('name')
     }
