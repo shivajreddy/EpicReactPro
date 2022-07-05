@@ -17,6 +17,7 @@ function Board() {
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
   const status = calculateStatus(winner, squares, nextValue)
+  console.log('this is the winner state', winner)
 
   // This is the function your square click handler will call. `square` should
   // be an index. So if they click the center square, this will be `4`.
@@ -25,24 +26,15 @@ function Board() {
     // given square index (like someone clicked a square that's already been
     // clicked), then return early so we don't make any state changes
     //
-    console.log('current status', squares)
-    if (squares.includes(square_idx)) return
+    if (winner || squares.includes(square_idx)) return
 
     // 🦉 It's typically a bad idea to mutate or directly change state in React.
     // Doing so can lead to subtle bugs that can easily slip into production.
-    //
-    // 🐨 make a copy of the squares array
-    // 💰 `[...squares]` will do it!)
     setSquares(prevState => {
-      prevState[square_idx] = nextValue
-      console.log('now the state is going to be', squares)
-      return prevState
+      const newState = [...prevState]
+      newState[square_idx] = nextValue
+      return newState
     })
-    //
-    // 🐨 set the value of the square that was selected
-    // 💰 `squaresCopy[square] = nextValue`
-    //
-    // 🐨 set the squares to your copy
   }
 
   function restart() {
@@ -63,6 +55,7 @@ function Board() {
     <div>
       {/* 🐨 put the status in the div below */}
       <div className="status">STATUS</div>
+      {status}
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}
