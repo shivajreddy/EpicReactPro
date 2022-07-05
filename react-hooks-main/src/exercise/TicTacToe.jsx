@@ -1,16 +1,36 @@
 import React from 'react'
+import {useLocalStorageState} from '../utils'
+
+function useLocalStorage() {
+  const [squares, setSquares] = React.useState(() => {
+    const localValue = localStorage.getItem('squares')
+    if (localValue) {
+      return JSON.parse(localValue)
+    }
+    return Array(9).fill(null)
+  })
+
+  React.useEffect(() => {
+    localStorage.setItem('squares', JSON.stringify(squares))
+  }, [squares])
+
+  return [squares, setSquares]
+}
 
 function TicTacToe() {
-  // state to track the x,o array
-  const [squares, setSquares] = React.useState(Array(9).fill(null))
+  // const [squares, setSquares] = React.useState(Array(9).fill(null))
+
+  const [squares, setSquares] = useLocalStorageState(
+    'tic-tac-toe-save',
+    Array(9).fill(null),
+  )
+
   const winner = calculateWinner(squares)
   const nextValue = calculateNextValue(squares)
   const status = generateStatus(winner, squares, nextValue)
 
-  console.log(winner)
   function selectSquare(square_idx) {
     if (winner || squares[square_idx]) return
-    console.log('button', square_idx)
     const newSquares = [...squares]
     newSquares[square_idx] = nextValue
     setSquares(newSquares)
