@@ -2,6 +2,7 @@
 // http://localhost:3000/isolated/final/04.js
 
 import * as React from 'react'
+import TicTacToe from '../exercise/TicTacToe'
 
 function Board() {
   const [squares, setSquares] = React.useState(Array(9).fill(null))
@@ -99,7 +100,12 @@ function calculateWinner(squares) {
 }
 
 function App() {
-  return <Game />
+  return (
+    <>
+      <Game />
+      <TicTacToe />
+    </>
+  )
 }
 
 export default App

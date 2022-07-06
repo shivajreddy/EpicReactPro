@@ -1,50 +1,88 @@
 import React from 'react'
 import {useLocalStorageState} from '../utils'
 
-function useLocalStorage() {
-  const [squares, setSquares] = React.useState(() => {
-    const localValue = localStorage.getItem('squares')
-    if (localValue) {
-      return JSON.parse(localValue)
-    }
-    return Array(9).fill(null)
-  })
+// function useLocalStorage() {
+//   const [squares, setSquares] = React.useState(() => {
+//     const localValue = localStorage.getItem('squares')
+//     if (localValue) {
+//       return JSON.parse(localValue)
+//     }
+//     return Array(9).fill(null)
+//   })
 
-  React.useEffect(() => {
-    localStorage.setItem('squares', JSON.stringify(squares))
-  }, [squares])
+//   React.useEffect(() => {
+//     localStorage.setItem('squares', JSON.stringify(squares))
+//   }, [squares])
 
-  return [squares, setSquares]
-}
+//   return [squares, setSquares]
+// }
 
 function TicTacToe() {
-  // const [squares, setSquares] = React.useState(Array(9).fill(null))
-
-  const [squares, setSquares] = useLocalStorageState(
-    'tic-tac-toe-save',
+  const [gameHistory, setGameHistory] = useLocalStorageState('game-history', [
     Array(9).fill(null),
-  )
+  ])
 
-  const winner = calculateWinner(squares)
-  const nextValue = calculateNextValue(squares)
-  const status = generateStatus(winner, squares, nextValue)
+  // const [squares, setSquares] = useLocalStorageState(
+  //   'tit-tac-toe-squares',
+  //   Array(9).fill(null),
+  // )
+
+  const [currStep, setCurrentStep] = useLocalStorageState('tic-tac-toe-step', 0)
+
+  const currSquares = gameHistory[currStep]
+
+  const winner = calculateWinner(currSquares)
+  const nextValue = calculateNextValue(currSquares)
+  const status = generateStatus(winner, currSquares, nextValue)
 
   function selectSquare(square_idx) {
-    if (winner || squares[square_idx]) return
-    const newSquares = [...squares]
-    newSquares[square_idx] = nextValue
-    setSquares(newSquares)
+    if (winner || currSquares[square_idx]) {
+      return
+    }
+
+    const newHistory = gameHistory.slice(0, currStep + 1)
+    const squares = [...currSquares]
+
+    // const newSquares = [...currSquares]
+    // newSquares[square_idx] = nextValue
+    // setSquares(newSquares)
+
+    squares[square_idx] = nextValue
+
+    // const newHistory = [...gameHistory]
+    // newHistory[gamePos] = newSquares
+    setGameHistory([...newHistory, squares])
+    setCurrentStep(newHistory.length)
   }
 
-  function resetBoard() {
-    setSquares(Array(9).fill(null))
-  }
+  const moves = gameHistory.map((stepSquares, step) => {
+    const desc = step ? `Go to #${step}` : 'Go to game start'
+    // determine if its the current step, so you can disable it
+    const isCurrStep = step === currStep
+    return (
+      <li key={step}>
+        <button disabled={isCurrStep} onClick={() => setCurrentStep(step)}>
+          {desc}
+          {isCurrStep ? '[current]' : null}
+        </button>
+      </li>
+    )
+  })
 
   function renderSquare(idx) {
     return (
       <button className="square" onClick={() => selectSquare(idx)}>
-        {squares[idx]}
+        {currSquares[idx]}
       </button>
+    )
+  }
+
+  function History() {
+    return (
+      <div>
+        <p>History</p>
+        {moves}
+      </div>
     )
   }
 
@@ -67,9 +105,6 @@ function TicTacToe() {
           {renderSquare(7)}
           {renderSquare(8)}
         </div>
-        <button className="restart" onClick={resetBoard}>
-          Reset
-        </button>
       </div>
     )
   }
@@ -112,7 +147,12 @@ function TicTacToe() {
     return squares.filter(Boolean).length % 2 === 0 ? 'X' : 'O'
   }
 
-  return <Board />
+  return (
+    <>
+      <Board />
+      <History />
+    </>
+  )
 }
 
 export default TicTacToe
