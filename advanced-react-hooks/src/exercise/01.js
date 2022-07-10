@@ -12,11 +12,20 @@ const ACTIONS = {
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.INCREMENT:
-      return {count: state.count + 1}
+      console.log('this', action)
+      return {
+        count: state.count + action.step,
+        message: 'hi there',
+        prev: state.count,
+      }
     case ACTIONS.DECREMENT:
-      return {count: state.count - 1}
+      return {
+        count: state.count - action.step,
+        message: 'bye there',
+        prev: state.count,
+      }
     default:
-      return new Error(`Action type not found ${action.type}`)
+      return new Error(`Unsupprted action type ${action.type}`)
   }
 }
 
@@ -28,9 +37,14 @@ function Counter({initialCount = 0, step = 10}) {
   // const increment = () => changeCount({step: step})
   return (
     <>
-      <button onClick={() => changeCount({type: ACTIONS.DECREMENT})}>-</button>
+      {state.prev && <div>Previous number : {state.prev}</div>}
+      <button onClick={() => changeCount({type: ACTIONS.DECREMENT, step})}>
+        -
+      </button>
       <span>{state.count}</span>
-      <button onClick={() => changeCount({type: ACTIONS.INCREMENT})}>+</button>
+      <button onClick={() => changeCount({type: ACTIONS.INCREMENT, step})}>
+        +
+      </button>
     </>
   )
 }
@@ -38,8 +52,8 @@ function Counter({initialCount = 0, step = 10}) {
 function App() {
   return (
     <>
-      <Counter />
-      {/* <ReducerComp /> */}
+      <Counter step={3} />
+      <ReducerComp />
     </>
   )
 }
